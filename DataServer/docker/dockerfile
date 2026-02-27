@@ -1,0 +1,14 @@
+# Make sure to pull from correct JRE version
+FROM eclipse-temurin:21.0.10_7-jre-ubi9-minimal@sha256:c68b5d6599e0b44ff5d055636d240dda7f088e894c692fa18acf36d8b34e2250
+
+COPY ./build/libs/MyMarketViewer-0.0.1-WIP.jar /usr/local/bin/MyMarketViewer.jar
+
+# Thymeleaf will expect static templates at file:/src/main/resources/static
+# Which meant root:/src/main/resources/static
+COPY ./build/resources/main/static /src/main/resources/static
+
+RUN chmod +x /usr/local/bin/MyMarketViewer.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "/usr/local/bin/MyMarketViewer.jar", "$@"]

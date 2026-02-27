@@ -1,4 +1,4 @@
-# Ignore what is considered local cache and local env data
+# Ignore what is considered Python local cache and local env data
 /**/__pycache__
 /**/.venv
 
@@ -8,3 +8,15 @@
 /**/processed/
 /**/raw/
 /**/tickets
+
+
+# Ignore what is considered Java local cache and local env data
+/**/.gradle
+/**/.idea
+/DataServer/build
+
+### VS Code ###
+/**/.vscode/
+
+### Mac OS ###
+/**/.DS_Store

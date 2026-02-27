@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+
+        #viewport {
+            height: 80%;
+        }
+
+        #canvas-container {
+            max-height: 100%;
+            max-width: 100%;
+            justify-items: center;
+            border: 1px solid black;
+        }
+    </style>
+    <!-- Add charts.js script so it can be used -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Caching layer script -->
+    <script>
+        // Define data cache layer
+        // Cache will be a map of Ticket and Array of data points
+        // So when a Ticket is selected for visualization, check the Cache first
+
+        MarketCache = {}
+
+        function CreateCacheObj(ticket, debtData = [], efficiencyData = [],
+            growthData = [], profitData = [], valuationData = []) {
+
+            debtStore = [];
+            debtStore.push(...debtData);
+
+            cacheObj = {
+                'debt': debtData,
+                'efficiency': efficiencyData,
+                'growth': growthData,
+                'profit': profitData,
+                'valuation': valuationData
+            };
+
+            MarketCache[ticket] = cacheObj;
+
+            return cacheObj
+        }
+
+        function isTicketCached(ticket) {
+            return MarketCache[ticket] != undefined;
+        }
+
+        function getTicketCachedData(ticket) {
+            return MarketCache[ticket];
+        }
+
+    </script>
+    <!-- On page load script -->
+    <script>
+
+        async function loadInitialData() {
+            //await populateTicketOptions();
+
+            const ticketSelector = document.getElementById('ticket');
+            ticketSelector.addEventListener('change', updateChart);
+
+            updateChart();
+        }
+
+        async function updateChart() {
+            const ctx = document.getElementById('myChart');
+            const ticketSelector = document.getElementById('ticket');
+
+            const ticket = ticketSelector.selectedOptions[0].value;
+            // get data based on this ticket
+            var ticketData;
+            if (isTicketCached(ticket)) {
+                ticketData = getTicketCachedData(ticket);
+            } else {
+                windowHost = window.location.host;
+                responseDebt = await fetch('http://' + windowHost + '/market/market-data/debt/' + ticket);
+                responseEff = await fetch('http://' + windowHost + '/market/market-data/efficiency/' + ticket);
+                responseGr = await fetch('http://' + windowHost + '/market/market-data/growth/' + ticket);
+                responseProf = await fetch('http://' + windowHost + '/market/market-data/profit/' + ticket);
+                responseVal = await fetch('http://' + windowHost + '/market/market-data/valuation/' + ticket);
+
+                if (!responseDebt.ok || !responseEff.ok || !responseGr.ok
+                    || !responseProf.ok || !responseVal.ok) {
+                    alert('Could not fetch data for ticket ' + ticket);
+                    return
+                }
+
+                ticketDataDebt = await responseDebt.json();
+                ticketDataEff = await responseEff.json();
+                ticketDataGr = await responseGr.json();
+                ticketDataProf = await responseProf.json();
+                ticketDataVal = await responseVal.json();
+
+                ticketData = CreateCacheObj(ticket, ticketDataDebt, ticketDataEff, ticketDataGr, ticketDataProf, ticketDataVal);
+            }
+
+            // Use ticketData as labels and dataset
+
+            data = {
+                labels: ticketData.debt.map(d => d.storageDate.split('T')[0]),
+                datasets: [
+                    // TODO - value is missing its data
+//                    {
+//                        label: 'Value',
+//                        data: ticketData.valuation.map(d => d.value),
+//                        borderWidth: 1
+//                    },
+                    {
+                        label: 'P/VP',
+                        data: ticketData.valuation.map(d => d.pOverVp),
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Div Liq/PL',
+                        data: ticketData.debt.map(d => d.divLiqOverPl),
+                        borderWidth: 1
+                    },
+                    // TODO - divLiqOverEbitda is missing its data
+//                    {
+//                        label: 'Div Liq/EBITDA',
+//                        data: ticketData.debt.map(d => d.divLiqOverEbitda),
+//                        borderWidth: 1
+//                    },
+                    {
+                        label: 'Div Liq/EBIT',
+                        data: ticketData.debt.map(d => d.divLiqOverEbit),
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Liq Corrente',
+                        data: ticketData.debt.map(d => d.liqCorrente),
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Margem Liq',
+                        data: ticketData.efficiency.map(d => d.margemLiq),
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'ROE',
+                        data: ticketData.profit.map(d => d.roe),
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'ROA',
+                        data: ticketData.profit.map(d => d.roa),
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            // Sample of Chart data
+            // data: {
+            //    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            //    datasets: [{
+            //      label: '# of Votes',
+            //      data: [12, 19, 3, 5, 2, 3],
+            //      borderWidth: 1
+            //    }]
+            //  }
+
+            // If a chart is already being displayed, destroy it to create the new one
+            if (ctx._displayedChart) {
+                ctx._displayedChart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+              type: 'line',
+              data: data,
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: false
+                  }
+                }
+              }
+            });
+
+            ctx._displayedChart = chart;
+        }
+
+
+
+        // Fetch the list of tickets on page load and add them as options //
+        async function populateTicketOptions() {
+            response = await fetch('http://' + window.location.host + '/market/ticker');
+            //console.log(response);
+
+            if (!response.ok) {
+                console.log("Could not query available tickets!")
+                return
+            }
+
+            // Transform json response into data object -->
+            ticketList = await response.json();
+
+            ticketDropDownList = document.getElementById('ticket')
+
+            // Sort tickets in alphabetical order for better display
+            ticketList.sort((a, b) => a.name.localeCompare(b.name))
+
+            // Add tickets at options to the selector
+            ticketList.forEach(t => {
+                option = document.createElement('option');
+                option.value = t.name;
+                option.textContent = t.name;
+                ticketDropDownList.options.add(option);
+            });
+
+            console.log('Finished loading tickets');
+        }
+
+        <!-- Add the event listener to the document -->
+        document.addEventListener('DOMContentLoaded', loadInitialData);
+    </script>
+</head>
+<body>
+<div id="viewport">
+    <div id="handle-bar">
+        <div>
+            <label for="ticket">Ticket:</label>
+            <select name="ticket" id="ticket">
+                <div th:each="ticketOption : ${ticketList}">
+                    <option th:value="${ticketOption.name}" th:text="${ticketOption.name}"></option>
+                </div>
+                <!-- options loaded via script -->
+            </select>
+        </div>
+    </div>
+    <div id="canvas-container" style="max-height: 100%; max-width: 100%; justify-items: center;">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+
+</body>
+</html>
