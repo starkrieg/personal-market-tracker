@@ -1,0 +1,6 @@
+{
+    "ticket": "A-TICKET-NAME",
+    "sources": [
+        "https://somewebsite/A-TICKET-NAME"
+    ]
+}

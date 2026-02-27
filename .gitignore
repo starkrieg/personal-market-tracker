@@ -1,0 +1,10 @@
+# Ignore what is considered local cache and local env data
+/**/__pycache__
+/**/.venv
+
+# Ignore the files inside Raw, Processed, Archive and Tickets
+# Only keep the base folder structure and example files
+/**/archive/
+/**/processed/
+/**/raw/
+/**/tickets
