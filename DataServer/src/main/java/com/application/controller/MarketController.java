@@ -7,7 +7,6 @@ import org.apache.coyote.BadRequestException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class MarketController {
 
     @GetMapping(value = {"/market-data/debt/{ticket-name}", "/market-data/debt/{ticket-name}/{dayRange}"})
     @ResponseBody
-    public ResponseEntity<List<IndicatorsDebt>> getDebtByTicker(@PathVariable("ticket-name") String ticketName,
+    public ResponseEntity<List<IndicatorsDebt>> getDebtByTicket(@PathVariable("ticket-name") String ticketName,
                                                                 @PathVariable Optional<Integer> dayRange)
             throws BadRequestException {
 
@@ -80,7 +79,7 @@ public class MarketController {
 
     @GetMapping(value = {"/market-data/efficiency/{ticket-name}", "/market-data/efficiency/{ticket-name}/{dayRange}"})
     @ResponseBody
-    public ResponseEntity<List<IndicatorsEfficiency>> getEfficiencyByTicker(@PathVariable("ticket-name") String ticketName,
+    public ResponseEntity<List<IndicatorsEfficiency>> getEfficiencyByTicket(@PathVariable("ticket-name") String ticketName,
                                                                             @PathVariable Optional<Integer> dayRange)
             throws BadRequestException {
 
@@ -107,7 +106,7 @@ public class MarketController {
 
     @GetMapping(value = {"/market-data/growth/{ticket-name}", "/market-data/growth/{ticket-name}/{dayRange}"})
     @ResponseBody
-    public ResponseEntity<List<IndicatorsGrowth>> getGrowthByTicker(@PathVariable("ticket-name") String ticketName,
+    public ResponseEntity<List<IndicatorsGrowth>> getGrowthByTicket(@PathVariable("ticket-name") String ticketName,
                                                                     @PathVariable Optional<Integer> dayRange)
             throws BadRequestException {
 
@@ -134,7 +133,7 @@ public class MarketController {
 
     @GetMapping(value = {"/market-data/profit/{ticket-name}", "/market-data/profit/{ticket-name}/{dayRange}"})
     @ResponseBody
-    public ResponseEntity<List<IndicatorsProfit>> getProfitByTicker(@PathVariable("ticket-name") String ticketName,
+    public ResponseEntity<List<IndicatorsProfit>> getProfitByTicket(@PathVariable("ticket-name") String ticketName,
                                                                     @PathVariable Optional<Integer> dayRange)
             throws BadRequestException {
 
@@ -161,7 +160,7 @@ public class MarketController {
 
     @GetMapping(value = {"/market-data/valuation/{ticket-name}", "/market-data/valuation/{ticket-name}/{dayRange}"})
     @ResponseBody
-    public ResponseEntity<List<IndicatorsValuation>> getValuationByTicker(@PathVariable("ticket-name") String ticketName,
+    public ResponseEntity<List<IndicatorsValuation>> getValuationByTicket(@PathVariable("ticket-name") String ticketName,
                                                                           @PathVariable Optional<Integer> dayRange)
             throws BadRequestException {
 

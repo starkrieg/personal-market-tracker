@@ -38,15 +38,6 @@ public class IndicatorsDebt {
     public IndicatorsDebt() {
     }
 
-    public IndicatorsDebt(IndicatorPK indicatorPK, Float divLiqOverPl, Float divLiqOverEbit, Float plOverAtivos, Float passOverAtivos, Float liqCorrente) {
-        this.indicatorPK = indicatorPK;
-        this.divLiqOverPl = divLiqOverPl;
-        this.divLiqOverEbit = divLiqOverEbit;
-        this.plOverAtivos = plOverAtivos;
-        this.passOverAtivos = passOverAtivos;
-        this.liqCorrente = liqCorrente;
-    }
-
     public IndicatorPK getIndicatorPK() {
         return indicatorPK;
     }

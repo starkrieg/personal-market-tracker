@@ -8,7 +8,7 @@ public class Ticket {
 
     @Id
     @Column(name = "NAME", nullable = false)
-    String name;
+    private String name;
 
     public Ticket() {
     }
