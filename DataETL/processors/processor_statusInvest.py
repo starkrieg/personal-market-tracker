@@ -7,6 +7,27 @@ import model.standard_data_model as standard_data_model
 # https://statusinvest.com.br/acoes/{TICKET-NAME}
 
 def _process_indicators(soup):
+
+    # extract data on day value
+    dayValueElm = soup.find("div", title="Valor atual do ativo").find("strong")
+    dayValue = dayValueElm.text.strip()
+
+    # remove R$ char
+    dayValue = dayValue.replace('R$', '').strip()
+
+    # statusInvest has number formats in d.ddd,dd
+    # so normalize to dddd.dd so it can act as float in python
+    dayValue = dayValue.replace('.', '').replace(',', '.')
+
+    # if invalid value, store None
+    if dayValue == '-':
+        dayValue = None
+    ###
+    outputData = standard_data_model.StandardizedData()
+
+    # store ticket day value first
+    outputData.valuationData.day_value = float(dayValue) if dayValue else None
+
     # start indicators data extraction
     parentIndicators = soup.find("div", id="indicators-section").find_all(class_="indicators", limit=5)
     cells = []
@@ -15,7 +36,7 @@ def _process_indicators(soup):
         cells.extend(indicator.find_all(class_=["title", "value"]))
     ###
 
-    outputData = standard_data_model.StandardizedData()
+    
 
     # cells is a sequential list of title-value
     # so loop with 2 step

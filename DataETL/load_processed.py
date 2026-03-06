@@ -340,14 +340,14 @@ def __InsertValuationData(ticker: str, day: str, valuationData: ValuationData):
         if len(results) == 0:
             # Not exists, create it
             insertQuery = f"""
-INSERT INTO INDICATORS_VALUATION (TICKET_NAME, STORAGE_DATE, DIV_YIELD, 
+INSERT INTO INDICATORS_VALUATION (TICKET_NAME, STORAGE_DATE, DAY_VALUE, DIV_YIELD, 
 PRECO_OVER_LUCRO, PEG_RATIO, P_OVER_VP,
 EV_OVER_EBITDA, EV_OVER_EBIT, P_OVER_EBITDA,
 P_OVER_EBIT, VPA, P_OVER_ATIVO,
 LPA, P_OVER_SR, P_OVER_CAP_GIRO,
 P_OVER_ATIVO_CIRC_LIQ
 ) 
-            VALUES ('{ticker}', to_date('{day}', 'yyyy-mm-dd'), {__GetValueOrNull(valuationData['div_yield'])}, 
+            VALUES ('{ticker}', to_date('{day}', 'yyyy-mm-dd'), {__GetValueOrNull(valuationData['day_value'])}, {__GetValueOrNull(valuationData['div_yield'])}, 
             {__GetValueOrNull(valuationData['preco_over_lucro'])}, {__GetValueOrNull(valuationData['peg_ratio'])}, {__GetValueOrNull(valuationData['p_over_vp'])},
             {__GetValueOrNull(valuationData['ev_over_ebitda'])}, {__GetValueOrNull(valuationData['ev_over_ebit'])}, {__GetValueOrNull(valuationData['p_over_ebitda'])},
             {__GetValueOrNull(valuationData['p_over_ebit'])}, {__GetValueOrNull(valuationData['vpa'])}, {__GetValueOrNull(valuationData['p_over_ativo'])},

@@ -20,6 +20,9 @@ public class IndicatorsValuation {
      * Numbers can also be NULL
      * So boxed Float will be able to support the data
      */
+    @Column(name = "DAY_VALUE")
+    private Float dayValue;
+
     @Column(name = "DIV_YIELD")
     private Float divYield;
 
@@ -30,32 +33,32 @@ public class IndicatorsValuation {
     private Float pegRatio;
 
     @Column(name = "P_OVER_VP")
-    private Float pOverVp;
+    private Float priceOverVp;
 
     @Column(name = "EV_OVER_EBITDA")
     private Float evOverEbitda;
     @Column(name = "EV_OVER_EBIT")
     private Float evOverEbit;
     @Column(name = "P_OVER_EBITDA")
-    private Float pOverEbitda;
+    private Float priceOverEbitda;
     @Column(name = "P_OVER_EBIT")
-    private Float pOverEbit;
+    private Float priceOverEbit;
 
     @Column(name = "VPA")
     private Float vpa;
     @Column(name = "P_OVER_ATIVO")
-    private Float pOverAtivo;
+    private Float priceOverAtivo;
     @Column(name = "LPA")
     private Float lpa;
 
     @Column(name = "P_OVER_SR")
-    private Float pOverSr;
+    private Float priceOverSr;
 
     @Column(name = "P_OVER_CAP_GIRO")
-    private Float pOverCapGiro;
+    private Float priceOverCapGiro;
 
     @Column(name = "P_OVER_ATIVO_CIRC_LIQ")
-    private Float pOverAtivoCircLiq;
+    private Float priceOverAtivoCircLiq;
 
     public IndicatorsValuation() {
     }
@@ -92,12 +95,12 @@ public class IndicatorsValuation {
         this.pegRatio = pegRatio;
     }
 
-    public Float getpOverVp() {
-        return pOverVp;
+    public Float getPriceOverVp() {
+        return priceOverVp;
     }
 
-    public void setpOverVp(Float pOverVp) {
-        this.pOverVp = pOverVp;
+    public void setPriceOverVp(Float priceOverVp) {
+        this.priceOverVp = priceOverVp;
     }
 
     public Float getEvOverEbitda() {
@@ -116,20 +119,20 @@ public class IndicatorsValuation {
         this.evOverEbit = evOverEbit;
     }
 
-    public Float getpOverEbitda() {
-        return pOverEbitda;
+    public Float getPriceOverEbitda() {
+        return priceOverEbitda;
     }
 
-    public void setpOverEbitda(Float pOverEbitda) {
-        this.pOverEbitda = pOverEbitda;
+    public void setPriceOverEbitda(Float priceOverEbitda) {
+        this.priceOverEbitda = priceOverEbitda;
     }
 
-    public Float getpOverEbit() {
-        return pOverEbit;
+    public Float getPriceOverEbit() {
+        return priceOverEbit;
     }
 
-    public void setpOverEbit(Float pOverEbit) {
-        this.pOverEbit = pOverEbit;
+    public void setPriceOverEbit(Float priceOverEbit) {
+        this.priceOverEbit = priceOverEbit;
     }
 
     public Float getVpa() {
@@ -140,12 +143,12 @@ public class IndicatorsValuation {
         this.vpa = vpa;
     }
 
-    public Float getpOverAtivo() {
-        return pOverAtivo;
+    public Float getPriceOverAtivo() {
+        return priceOverAtivo;
     }
 
-    public void setpOverAtivo(Float pOverAtivo) {
-        this.pOverAtivo = pOverAtivo;
+    public void setPriceOverAtivo(Float priceOverAtivo) {
+        this.priceOverAtivo = priceOverAtivo;
     }
 
     public Float getLpa() {
@@ -156,27 +159,35 @@ public class IndicatorsValuation {
         this.lpa = lpa;
     }
 
-    public Float getpOverSr() {
-        return pOverSr;
+    public Float getPriceOverSr() {
+        return priceOverSr;
     }
 
-    public void setpOverSr(Float pOverSr) {
-        this.pOverSr = pOverSr;
+    public void setPriceOverSr(Float priceOverSr) {
+        this.priceOverSr = priceOverSr;
     }
 
-    public Float getpOverCapGiro() {
-        return pOverCapGiro;
+    public Float getPriceOverCapGiro() {
+        return priceOverCapGiro;
     }
 
-    public void setpOverCapGiro(Float pOverCapGiro) {
-        this.pOverCapGiro = pOverCapGiro;
+    public void setPriceOverCapGiro(Float priceOverCapGiro) {
+        this.priceOverCapGiro = priceOverCapGiro;
     }
 
-    public Float getpOverAtivoCircLiq() {
-        return pOverAtivoCircLiq;
+    public Float getPriceOverAtivoCircLiq() {
+        return priceOverAtivoCircLiq;
     }
 
-    public void setpOverAtivoCircLiq(Float pOverAtivoCircLiq) {
-        this.pOverAtivoCircLiq = pOverAtivoCircLiq;
+    public void setPriceOverAtivoCircLiq(Float priceOverAtivoCircLiq) {
+        this.priceOverAtivoCircLiq = priceOverAtivoCircLiq;
+    }
+
+    public Float getDayValue() {
+        return dayValue;
+    }
+
+    public void setDayValue(Float dayValue) {
+        this.dayValue = dayValue;
     }
 }

@@ -1,4 +1,5 @@
 class ValuationData:
+    day_value: float = None
     div_yield: float = None
     preco_over_lucro: float = None
     peg_ratio: float = None
@@ -123,6 +124,7 @@ def mergeStandardData(data1: StandardizedData, data2: StandardizedData):
     ###
 
     ### valuation
+    newData.valuationData.day_value = mergeDataPiece(data1.valuationData.day_value, data2.valuationData.day_value)
     newData.valuationData.div_yield = mergeDataPiece(data1.valuationData.div_yield, data2.valuationData.div_yield)
     newData.valuationData.preco_over_lucro = mergeDataPiece(data1.valuationData.preco_over_lucro, data2.valuationData.preco_over_lucro)
     newData.valuationData.peg_ratio = mergeDataPiece(data1.valuationData.peg_ratio, data2.valuationData.peg_ratio)

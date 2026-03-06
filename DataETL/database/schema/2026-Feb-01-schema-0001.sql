@@ -53,6 +53,7 @@ WITH (oids = false);
 CREATE TABLE public.INDICATORS_VALUATION (
     TICKET_NAME text NOT NULL,
     STORAGE_DATE date NOT NULL,
+    DAY_VALUE double precision,
     DIV_YIELD double precision ,
     PRECO_OVER_LUCRO double precision ,
     PEG_RATIO double precision ,

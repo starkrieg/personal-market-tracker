@@ -11,12 +11,33 @@ def process(filePath):
 
     soup = BeautifulSoup(file, "html.parser")
     
-    # start data extraction
+    # extract data on day value
+    dayValueElm = soup.find("div", class_="_card cotacao").find("span", class_="value")
+    dayValue = dayValueElm.text.strip()
+
+    # remove R$ char
+    dayValue = dayValue.replace('R$', '').strip()
+
+    # investidor10 has number formats in d.ddd,dd
+    # so normalize to dddd.dd so it can act as float in python
+    dayValue = dayValue.replace('.', '').replace(',', '.')    
+
+    # if invalid value, store None
+    if dayValue == '-':
+        dayValue = None
+    ###
+
+    outputData = standard_data_model.StandardizedData()
+
+    # store ticket day value first
+    outputData.valuationData.day_value = float(dayValue) if dayValue else None
+
+    # start indicators data extraction
     indicators = soup.find("div", id="indicators")
     indicatorsCells = indicators.find(id="table-indicators")
     cells = indicatorsCells.find_all("div", class_="cell")
 
-    outputData = standard_data_model.StandardizedData()
+    
 
     for cell in cells:
         spans = cell.find_all("span")
@@ -29,7 +50,7 @@ def process(filePath):
         # remove % char
         value = value.replace('%', '')
 
-        # statusInvest has number formats in d.ddd,dd
+        # investidor10 has number formats in d.ddd,dd
         # so normalize to dddd.dd so it can act as float in python
         value = value.replace('.', '').replace(',', '.')
 

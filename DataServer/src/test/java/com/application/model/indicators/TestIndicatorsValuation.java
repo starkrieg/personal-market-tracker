@@ -17,17 +17,17 @@ public class TestIndicatorsValuation {
         Assert.isNull(indicatorsValuation.getDivYield(), "Expected null when empty constructor");
         Assert.isNull(indicatorsValuation.getPrecoOverLucro(), "Expected null when empty constructor");
         Assert.isNull(indicatorsValuation.getPegRatio(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverVp(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverVp(), "Expected null when empty constructor");
         Assert.isNull(indicatorsValuation.getEvOverEbitda(), "Expected null when empty constructor");
         Assert.isNull(indicatorsValuation.getEvOverEbit(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverEbitda(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverEbit(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverEbitda(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverEbit(), "Expected null when empty constructor");
         Assert.isNull(indicatorsValuation.getVpa(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverAtivo(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverAtivo(), "Expected null when empty constructor");
         Assert.isNull(indicatorsValuation.getLpa(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverSr(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverCapGiro(), "Expected null when empty constructor");
-        Assert.isNull(indicatorsValuation.getpOverAtivoCircLiq(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverSr(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverCapGiro(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverAtivoCircLiq(), "Expected null when empty constructor");
     }
 
     @Test
@@ -89,10 +89,10 @@ public class TestIndicatorsValuation {
         Float value = 3.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverVp(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverVp(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverVp(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverVp());
+        indicatorsValuation.setPriceOverVp(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverVp());
     }
 
     @Test
@@ -122,10 +122,10 @@ public class TestIndicatorsValuation {
         Float value = 6.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverEbitda(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverEbitda(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverEbitda(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverEbitda());
+        indicatorsValuation.setPriceOverEbitda(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverEbitda());
     }
 
     @Test
@@ -133,10 +133,10 @@ public class TestIndicatorsValuation {
         Float value = 7.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverEbit(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverEbit(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverEbit(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverEbit());
+        indicatorsValuation.setPriceOverEbit(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverEbit());
     }
 
     @Test
@@ -155,10 +155,10 @@ public class TestIndicatorsValuation {
         Float value = 9.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverAtivo(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverAtivo(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverAtivo(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverAtivo());
+        indicatorsValuation.setPriceOverAtivo(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverAtivo());
     }
 
     @Test
@@ -177,10 +177,10 @@ public class TestIndicatorsValuation {
         Float value = 11.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverSr(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverSr(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverSr(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverSr());
+        indicatorsValuation.setPriceOverSr(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverSr());
     }
 
     @Test
@@ -188,10 +188,10 @@ public class TestIndicatorsValuation {
         Float value = 12.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverCapGiro(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverCapGiro(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverCapGiro(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverCapGiro());
+        indicatorsValuation.setPriceOverCapGiro(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverCapGiro());
     }
 
     @Test
@@ -199,10 +199,22 @@ public class TestIndicatorsValuation {
         Float value = 13.1f;
 
         IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
-        Assert.isNull(indicatorsValuation.getpOverAtivoCircLiq(), "Expected null when empty constructor");
+        Assert.isNull(indicatorsValuation.getPriceOverAtivoCircLiq(), "Expected null when empty constructor");
 
-        indicatorsValuation.setpOverAtivoCircLiq(value);
-        Assertions.assertEquals(value, indicatorsValuation.getpOverAtivoCircLiq());
+        indicatorsValuation.setPriceOverAtivoCircLiq(value);
+        Assertions.assertEquals(value, indicatorsValuation.getPriceOverAtivoCircLiq());
     }
+
+    @Test
+    public void TestFieldDayValue() {
+        Float value = 14.1f;
+
+        IndicatorsValuation indicatorsValuation = new IndicatorsValuation();
+        Assert.isNull(indicatorsValuation.getDayValue(), "Expected null when empty constructor");
+
+        indicatorsValuation.setDayValue(value);
+        Assertions.assertEquals(value, indicatorsValuation.getDayValue());
+    }
+
 
 }

@@ -110,15 +110,15 @@
             data = {
                 labels: ticketData.debt.map(d => d.storageDate.split('T')[0]),
                 datasets: [
-                    // TODO - value is missing its data
-//                    {
-//                        label: 'Value',
-//                        data: ticketData.valuation.map(d => d.value),
-//                        borderWidth: 1
-//                    },
+
+                    {
+                        label: 'Day Value',
+                        data: ticketData.valuation.map(d => d.dayValue),
+                        borderWidth: 1
+                    },
                     {
                         label: 'P/VP',
-                        data: ticketData.valuation.map(d => d.pOverVp),
+                        data: ticketData.valuation.map(d => d.priceOverVp),
                         borderWidth: 1
                     },
                     {
