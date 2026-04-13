@@ -16,7 +16,7 @@ Put your own client app in front of it and display the data as you want.
 
 ### Client-less option
 
-Thymeleaf is used to serve a "index" page so data can be viewed even without pretty web clients.
+Thymeleaf is used to serve an "index" page so data can be viewed even without pretty web clients.
 
 It allows for ticket selection and shows a simple line graph based on Chart.js. A simple caching layer has been added with JS to facilitate use.
 
@@ -27,8 +27,6 @@ Can be built/run locally on port 8080 or run with docker.
 Check the folder `docker` to see docker build and docker-compose commands.
 
 ### Pending Features
-
-- Addition of unit tests
-- Addition of paginations and controls on endpoints
-- Implementation of optional caching with Redis for third-party clients
+- Addition of pagination and controls on endpoints
+- Addition of caching layer using Redis
 - TBD
