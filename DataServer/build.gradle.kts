@@ -30,9 +30,6 @@ dependencies {
     // Database at this point should be Postgres
     implementation("org.postgresql:postgresql")
 
-    // Cache database as Redis
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-
     // Thymeleaf for templating web pages
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 

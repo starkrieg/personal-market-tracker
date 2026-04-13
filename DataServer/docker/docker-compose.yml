@@ -24,11 +24,3 @@ services:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
       JAVA_TOOL_OPTIONS: '-Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres'
-
-  redis:
-    networks:
-      - market
-    image: redis:8.6.1-alpine3.23@sha256:120635df3c1e1635fefdb2c3bd379f8d8ad433d5cb1d57ae84f523e5fb015153
-    restart: always
-    ports:
-      - 6379:6379
