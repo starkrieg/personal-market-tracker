@@ -1,0 +1,5 @@
+BeautifulSoup4>=4.14.3
+psycopg2-binary>=2.9.11
+requests>=2.33.1
+fake_useragent>=2.2.0
+fastapi>=0.136.0

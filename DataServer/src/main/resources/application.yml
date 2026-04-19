@@ -10,12 +10,12 @@ management:
 spring:
   # Details for our datasource
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: "postgres"
-    password: "pass"
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATASOURCE_USER:postgres}
+    password: ${DATASOURCE_PASS:pass}
   # Hibernate
   jpa:
-    database: POSTGRESQL
+    database: ${JPA_DATABASE:POSTGRESQL}
     show-sql: false
     hibernate:
       # DO NO DROP-CREATE SCHEMA

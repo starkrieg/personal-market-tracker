@@ -28,6 +28,7 @@ public interface IndicatorsEfficiencyRepository extends JpaRepository<Indicators
             FROM IndicatorsEfficiency efficiency
             WHERE efficiency.indicatorPK.ticketName = :ticketName
             AND efficiency.indicatorPK.storageDate >= CAST(date_subtract(CURRENT_DATE, make_interval(0,0,0, :dayRange)) AS DATE)
+            ORDER BY efficiency.indicatorPK.storageDate ASC
             """)
     public List<IndicatorsEfficiency> findAllByTicketAndRange(@Param("ticketName") String ticketName, @Param("dayRange") int dayRange);
 

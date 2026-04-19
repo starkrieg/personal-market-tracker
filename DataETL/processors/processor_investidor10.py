@@ -60,7 +60,7 @@ def process(filePath):
         ###
 
         extractedData = {
-            "id": title,
+            "id": title.upper(),
             "value": float(value) if value else None
         }
         
@@ -89,7 +89,7 @@ def process(filePath):
             outputData.valuationData.p_over_ativo = extractedData['value']
         elif extractedData['id'] == 'P/CAP.GIRO' :
             outputData.valuationData.p_over_cap_giro = extractedData['value']
-        elif extractedData['id'] == 'P/ATIVO CIRC LIQ' :
+        elif extractedData['id'] == 'P/ATIVO CIRC. LIQ.' :
             outputData.valuationData.p_over_ativo_circ_liq = extractedData['value']
         elif extractedData['id'] == 'VPA' :
             outputData.valuationData.vpa = extractedData['value']
@@ -105,7 +105,7 @@ def process(filePath):
             outputData.efficiencyData.margem_bruta = extractedData['value']
         elif extractedData['id'] == 'MARGEM EBIT' :
             outputData.efficiencyData.margem_ebit = extractedData['value']
-        elif extractedData['id'] == 'MARGEM EBITDA' :
+        elif extractedData['id'] == 'MARGEM EBTIDA' :
             outputData.efficiencyData.margem_ebitda = extractedData['value']
 
         ### profit

@@ -28,6 +28,7 @@ public interface IndicatorsDebtRepository extends JpaRepository<IndicatorsDebt, 
             FROM IndicatorsDebt debt
             WHERE debt.indicatorPK.ticketName = :ticketName
             AND debt.indicatorPK.storageDate >= CAST(date_subtract(CURRENT_DATE, make_interval(0,0,0, :dayRange)) AS DATE)
+            ORDER BY debt.indicatorPK.storageDate ASC
             """)
     public List<IndicatorsDebt> findAllByTicketAndRange(@Param("ticketName") String ticketName, @Param("dayRange") int dayRange);
 

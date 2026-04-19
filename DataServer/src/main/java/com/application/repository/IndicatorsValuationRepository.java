@@ -28,6 +28,7 @@ public interface IndicatorsValuationRepository extends JpaRepository<IndicatorsV
             FROM IndicatorsValuation valuation
             WHERE valuation.indicatorPK.ticketName = :ticketName
             AND valuation.indicatorPK.storageDate >= CAST(date_subtract(CURRENT_DATE, make_interval(0,0,0, :dayRange)) AS DATE)
+            ORDER BY valuation.indicatorPK.storageDate ASC
             """)
     public List<IndicatorsValuation> findAllByTicketAndRange(@Param("ticketName") String ticketName, @Param("dayRange") int dayRange);
 

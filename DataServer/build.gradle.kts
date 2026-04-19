@@ -36,6 +36,10 @@ dependencies {
     // Add actuator endpoints
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
+    // Elastic Java Application Performance Monitoring (APM)
+    //val elasticApmVersion = "1.55.4"
+    //compileOnly("co.elastic.apm:apm-agent-attach:$elasticApmVersion")
+
     // For testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
