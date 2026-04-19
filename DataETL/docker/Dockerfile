@@ -36,8 +36,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Switch to the non-privileged user to run the application.
 USER appuser
 
-# Copy the source code into the container.
-COPY . .
+# Copy to the container only the scripts that will run
+COPY ./model ./model
+COPY ./load_processed.py ./load_processed.py
+COPY ./main_data_load.py ./main_data_load.py
 
 # No ports are exposed for this container
 
