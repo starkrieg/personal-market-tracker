@@ -28,6 +28,7 @@ public interface IndicatorsProfitRepository extends JpaRepository<IndicatorsProf
             FROM IndicatorsProfit profit
             WHERE profit.indicatorPK.ticketName = :ticketName
             AND profit.indicatorPK.storageDate >= CAST(date_subtract(CURRENT_DATE, make_interval(0,0,0, :dayRange)) AS DATE)
+            ORDER BY profit.indicatorPK.storageDate ASC
             """)
     public List<IndicatorsProfit> findAllByTicketAndRange(@Param("ticketName") String ticketName, @Param("dayRange") int dayRange);
 

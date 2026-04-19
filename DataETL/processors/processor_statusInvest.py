@@ -9,8 +9,14 @@ import model.standard_data_model as standard_data_model
 def _process_indicators(soup):
 
     # extract data on day value
-    dayValueElm = soup.find("div", title="Valor atual do ativo").find("strong")
-    dayValue = dayValueElm.text.strip()
+    dayValueElm = soup.find("div", title="Valor atual do ativo")
+
+    dayValue = ""
+
+    if not dayValueElm is None:
+        dayValueElm = dayValueElm.find("strong")
+        dayValue = dayValueElm.text.strip()
+    ###
 
     # remove R$ char
     dayValue = dayValue.replace('R$', '').strip()
@@ -29,12 +35,20 @@ def _process_indicators(soup):
     outputData.valuationData.day_value = float(dayValue) if dayValue else None
 
     # start indicators data extraction
-    parentIndicators = soup.find("div", id="indicators-section").find_all(class_="indicators", limit=5)
+    parentIndicators = soup.find("div", id="indicators-section")
     cells = []
+    
+    if not parentIndicators is None:
+        parentIndicators = parentIndicators.find_all(class_="indicators", limit=5)
 
-    for indicator in parentIndicators:
-        cells.extend(indicator.find_all(class_=["title", "value"]))
+        for indicator in parentIndicators:
+            cells.extend(indicator.find_all(class_=["title", "value"]))
+        ###
     ###
+
+
+
+
 
     
 

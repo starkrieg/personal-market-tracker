@@ -3,49 +3,11 @@ from model.standard_data_model import StandardizedData, DebtData, EfficiencyData
 import json
 
 # Library for interacting with Postgres DB
+# Kept to maintain existing DB Errors for now
 import psycopg2
 
+# global database connection
 database_connection = None
-
-# Connect to the PostgreSQL database server and return a connection object
-# Must remember to close the connection manually
-def __postgree_connection():
-    global database_connection
-
-    if database_connection != None:    
-        return database_connection
-    ###
-
-    try:
-        # Establish the connection using a connection string or keyword arguments
-        database_connection = psycopg2.connect(
-            host="localhost",
-            database="postgres",
-            user="postgres",
-            password="pass", # default pass - TODO change to vault/secret on prod
-            port="5432"  # Port is optional; defaults to 5432
-        )
-
-        # Test connection
-        # Create a cursor object to execute SQL queries
-        cursor = database_connection.cursor()
-        cursor.execute("SELECT version();")
-        db_version = cursor.fetchone()
-        print(f"PostgreSQL database version: {db_version}\n")
-        # Remember to close the cursor
-        cursor.close()
-
-        print("Connected to PostgreSQL database successfully!")
-    except (psycopg2.DatabaseError, Exception) as error:
-        print(f"Error connecting to the database: {error}")
-        if database_connection:
-            # Make sure connection is closed if error
-            database_connection.close()
-            print("Database connection closed because of error.")
-    ###
-    
-    return database_connection
-###
 
 #
 # Load processed data (json files) into Postgree Database
@@ -55,7 +17,12 @@ def __postgree_connection():
 # This method is separated from the data processors because the Postgree is not always running
 # So processed data will only be loaded and archived when needed
 #
-def load_processed(processedStoragePath: str):
+def load_processed(databaseConn, processedStoragePath: str):
+    global database_connection
+
+    # set the global database connection
+    database_connection = databaseConn
+
     if len(processedStoragePath) == 0:
         print("Error: Cannot load processed data from empty path")
         return
@@ -70,12 +37,12 @@ def load_processed(processedStoragePath: str):
 
     for folderDay in processedFolders:
         # every folder is a date in format yyyy-mm-dd
-        folderPath = processedStoragePath + '\\' + folderDay
+        folderPath = os.path.join(processedStoragePath, folderDay)
         
         tickerList = os.listdir(folderPath)
         for tickerFile in tickerList:
             # ticker json file named after a ticker, like AGRO3.json
-            tickerPath = folderPath + '\\' + tickerFile
+            tickerPath = os.path.join( folderPath , tickerFile )
             ticker = tickerFile.removesuffix('.json')
             __load_ticker_data(folderDay, ticker, tickerPath)
             #
@@ -142,8 +109,9 @@ def __load_ticker_data(day: str, ticker: str, tickerPath: str):
 
 # Returns boolean to identify success or failure
 def __CreateTicker(ticker: str):
+    global database_connection
     # get existing or open new DB connection
-    connection = __postgree_connection()
+    connection = database_connection
     try:
         cursor = connection.cursor()
         cursor.execute(f"""
@@ -182,8 +150,9 @@ def __GetValueOrNull(value):
 
 # Returns boolean to identify success or failure
 def __InsertDebtData(ticker: str, day: str, debtData: DebtData):
+    global database_connection
     # get existing or open new DB connection
-    connection = __postgree_connection()
+    connection = database_connection
     try:
         cursor = connection.cursor()
         cursor.execute(f"""
@@ -220,8 +189,9 @@ LIQ_CORRENTE)
 
 # Returns boolean to identify success or failure
 def __InsertEfficiencyData(ticker: str, day: str, efficiencyData: EfficiencyData):
+    global database_connection
     # get existing or open new DB connection
-    connection = __postgree_connection()
+    connection = database_connection
     try:
         cursor = connection.cursor()
         cursor.execute(f"""
@@ -256,8 +226,9 @@ MARGEM_EBITDA, MARGEM_EBIT, MARGEM_LIQ)
 
 # Returns boolean to identify success or failure
 def __InsertGrowthData(ticker: str, day: str, growthData: GrowthData):
+    global database_connection
     # get existing or open new DB connection
-    connection = __postgree_connection()
+    connection = database_connection
     try:
         cursor = connection.cursor()
         cursor.execute(f"""
@@ -291,8 +262,9 @@ CAGR_LUCROS_5_ANOS)
 
 # Returns boolean to identify success or failure
 def __InsertProfitData(ticker: str, day: str, profitData: ProfitData):
+    global database_connection
     # get existing or open new DB connection
-    connection = __postgree_connection()
+    connection = database_connection
     try:
         cursor = connection.cursor()
         cursor.execute(f"""
@@ -327,8 +299,9 @@ ROA, ROIC, GIRO_ATIVOS)
 
 # Returns boolean to identify success or failure
 def __InsertValuationData(ticker: str, day: str, valuationData: ValuationData):
+    global database_connection
     # get existing or open new DB connection
-    connection = __postgree_connection()
+    connection = database_connection
     try:
         cursor = connection.cursor()
         cursor.execute(f"""

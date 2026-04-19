@@ -4,7 +4,7 @@ import json
 
 import data_scraper
 
-tickets_path = os.path.dirname(os.path.abspath(__file__)) + '\\tickets\\'
+tickets_path = os.path.join( os.path.dirname(os.path.abspath(__file__)) , 'tickets' )
 
 def run():
     today = date.today().isoformat()
@@ -25,7 +25,7 @@ def run():
     ## end if
 
     for ticketPath in ticket_list:
-        ticketFile = open(tickets_path + ticketPath, "r", encoding="utf-8")
+        ticketFile = open(os.path.join(tickets_path , ticketPath), "r", encoding="utf-8")
         try:
             ticketObj = json.load(ticketFile)
             ticketFile.close()

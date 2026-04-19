@@ -28,6 +28,7 @@ public interface IndicatorsGrowthRepository extends JpaRepository<IndicatorsGrow
             FROM IndicatorsGrowth growth
             WHERE growth.indicatorPK.ticketName = :ticketName
             AND growth.indicatorPK.storageDate >= CAST(date_subtract(CURRENT_DATE, make_interval(0,0,0, :dayRange)) AS DATE)
+            ORDER BY growth.indicatorPK.storageDate ASC
             """)
     public List<IndicatorsGrowth> findAllByTicketAndRange(@Param("ticketName") String ticketName, @Param("dayRange") int dayRange);
 

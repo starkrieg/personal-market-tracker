@@ -1,0 +1,113 @@
+# Use postgres/example user/password credentials
+
+# Run with 
+# docker-compose -p stock-market-data -f .\database\docker-compose.yml up -d
+
+networks:
+    market:
+
+# Generic credentials to start
+services:
+    postgres:
+        networks:
+          - market
+        container_name: postgres
+        image: postgres:18.3-alpine3.23@sha256:c5739fc99d1a3278c0a2113758a2433ce29ef964b30df705094fd77dfa5da2fa
+        restart: always
+        # set shared memory limit when using docker compose
+        shm_size: 128mb
+        # or set shared memory limit when deploy via swarm stack
+        # expose the ports to connect from outside docker env
+        ports:
+          - 5432:5432
+        #volumes:
+        #  - type: tmpfs
+        #    target: /dev/shm
+        #    tmpfs:
+        #      size: 134217728 # 128*2^20 bytes = 128Mb
+        environment:
+          # default user/pass
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pass
+
+    # Admin panel for postgres
+    adminer:
+        networks:
+          - market
+        image: adminer
+        restart: always
+        ports:
+            - 8081:8080
+        depends_on:
+            - postgres
+   
+    my-market-viewer:
+        networks:
+          - market
+        image: my-market-viewer:latest
+        restart: always
+        # set shared memory limit when using docker compose
+        shm_size: 128mb
+        # or set shared memory limit when deploy via swarm stack
+        # expose the ports to connect from outside docker env
+        ports:
+          # outside:inside
+          - 3000:8080
+        #volumes:
+        #  - type: tmpfs
+        #    target: /dev/shm
+        #    tmpfs:
+        #      size: 134217728 # 128*2^20 bytes = 128Mb
+        depends_on:
+            - postgres
+        environment:
+          JPA_DATABASE: 'POSTGRESQL'
+          DATASOURCE_URL: 'jdbc:postgresql://postgres:5432/postgres'
+          DATASOURCE_USER: 'postgres'
+          DATASOURCE_PASS: 'pass'
+
+    market-data-loader:
+      networks:
+        - market
+      image: market-data-loader:latest
+      container_name: data-loader
+      command: "--DatabaseHost postgres --DatabasePort 5432 --DatabaseUsername postgres --DatabasePassword pass"
+      # add args directly to command like here
+      # args are:
+      # --DatabaseHost HOST
+      # --DatabasePort PORT
+      # --DatabaseUsername USER
+      # --DatabasePassword PASS
+      depends_on:
+            - postgres
+
+  # For more info on elastic local with docker read 
+  # https://www.elastic.co/docs/deploy-manage/deploy/self-managed/install-elasticsearch-docker-basic
+
+  # For elastic user password > exec /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+  # For elastic enrollment token > exec /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+
+#  elasticsearch:
+#    networks:
+#      - market
+#    image: elasticsearch:8.19.14@sha256:93697ea11d6529e3edf00998d1a34668034d2734434a68f3ba575e34f7a6f118
+#    ports:
+#      - 9200:9200
+#
+#  kibana:
+#    networks:
+#      - market
+#    image: kibana:8.19.14@sha256:126781b176b5410866475fa651062367db731f423d528c1c93586563aa75eee7
+#    ports:
+#      - 5601:5601
+#    depends_on:
+#      - elasticsearch
+  
+  
+  # for later
+  #logstash:
+  #  networks:
+  #    - market
+  #  image: docker.elastic.co/logstash:8.19.14@sha256:2276f4865ac1bc7e67330d4cf6b1800312b974e946bbf6417bd57802f3fb2d34
+  #  depends_on:
+  #    - kibana

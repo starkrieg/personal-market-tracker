@@ -102,6 +102,14 @@
                 ticketDataProf = await responseProf.json();
                 ticketDataVal = await responseVal.json();
 
+                // Sometimes, data coming from server is not sorted correctly
+                // So perform sorting New to Old before storing as cache
+                ticketDataDebt = ticketDataDebt.sort((a,b) => new Date(a.storageDate) - new Date(b.storageDate) )
+                ticketDataEff = ticketDataEff.sort((a,b) => new Date(a.storageDate) - new Date(b.storageDate) )
+                ticketDataGr = ticketDataGr.sort((a,b) => new Date(a.storageDate) - new Date(b.storageDate) )
+                ticketDataProf = ticketDataProf.sort((a,b) => new Date(a.storageDate) - new Date(b.storageDate) )
+                ticketDataVal = ticketDataVal.sort((a,b) => new Date(a.storageDate) - new Date(b.storageDate) )
+
                 ticketData = CreateCacheObj(ticket, ticketDataDebt, ticketDataEff, ticketDataGr, ticketDataProf, ticketDataVal);
             }
 

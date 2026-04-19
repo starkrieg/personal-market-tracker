@@ -8,15 +8,15 @@ import shutil
 import data_processor
 from model.standard_data_model import StandardizedData, mergeStandardData
 
-base_storage_path = os.path.dirname(os.path.abspath(__file__)) + '\\storage\\'
-processed_storage = base_storage_path + 'processed\\'
-raw_storage = base_storage_path + 'raw\\'
-archive_storage = base_storage_path + 'archive\\raw\\' # specific archive for raw data
+base_storage_path = os.path.join( os.path.dirname(os.path.abspath(__file__)) , 'storage' )
+processed_storage = os.path.join( base_storage_path , 'processed' )
+raw_storage = os.path.join( base_storage_path , 'raw' )
+archive_storage = os.path.join( base_storage_path , 'archive', 'raw' ) # specific archive for raw data
 
 def processDayTickFolder(dayFolder, tickFolder):
 
     tickerData: StandardizedData = StandardizedData()
-    dataFiles = os.listdir(raw_storage + dayFolder + '\\' + tickFolder)
+    dataFiles = os.listdir(os.path.join(raw_storage , dayFolder , tickFolder))
 
     # for every file, check the type
     # statusinvest, investidor10, btgpactual, etc
@@ -29,7 +29,7 @@ def processDayTickFolder(dayFolder, tickFolder):
     for scrappedFile in dataFiles:
         ###
 
-        filePath = raw_storage + dayFolder + '\\' + tickFolder + '\\' + scrappedFile
+        filePath = os.path.join(raw_storage , dayFolder , tickFolder , scrappedFile)
         fileData: StandardizedData = StandardizedData()
 
         # Scrapped files are expected to be named after source website
@@ -43,7 +43,7 @@ def processDayTickFolder(dayFolder, tickFolder):
             fileData = data_processor.processInvestidor10(filePath)
         else:
             ### report as error
-            print(f"Error: Unexpected file [{scrappedFile}] at {raw_storage + dayFolder + '\\' + tickFolder}")
+            print(f"Error: Unexpected file [{scrappedFile}] at {os.path.join(raw_storage , dayFolder , tickFolder)}")
             fileData = None
         ###
 
@@ -70,7 +70,7 @@ def run():
 
         print(f"Day {dayFolder}", end=" ", flush=True)
 
-        processedTickerPath = processed_storage + dayFolder + '\\'
+        processedTickerPath = os.path.join(processed_storage , dayFolder )
 
         # check if a folder exists for this ticket that today
         # if not, create it
@@ -80,12 +80,12 @@ def run():
 
         isDayProcessError = False
 
-        rawFoldersByTicksInADay = os.listdir(raw_storage + dayFolder)
+        rawFoldersByTicksInADay = os.listdir(os.path.join(raw_storage , dayFolder))
         for tickFolder in rawFoldersByTicksInADay:
             ###
             print(".", end="", flush=True)
             
-            processedTickerFilePath = processedTickerPath + tickFolder + ".json"
+            processedTickerFilePath = os.path.join(processedTickerPath , tickFolder) + ".json"
 
             isAlreadyProcessedTick = os.path.exists(processedTickerFilePath)
 
@@ -123,12 +123,12 @@ def run():
 
             print("Moving to archive data......", end="", flush=True)
             # raw_storage + dayFolder
-            archivedFile = shutil.make_archive(archive_storage + dayFolder, 'zip', root_dir=(raw_storage + dayFolder))
+            archivedFile = shutil.make_archive(os.path.join(archive_storage , dayFolder), 'zip', root_dir=(os.path.join(raw_storage , dayFolder)))
             print(f"Archived {archivedFile}")
 
             print("Cleaning old data...........", end="", flush=True)
             # delete original raw folder
-            shutil.rmtree(raw_storage + dayFolder)
+            shutil.rmtree(os.path.join(raw_storage , dayFolder))
             print(f"raw {dayFolder} data was cleaned out!")
         ###
 
