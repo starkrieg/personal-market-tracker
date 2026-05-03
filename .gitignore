@@ -4,10 +4,8 @@
 
 # Ignore the files inside Raw, Processed, Archive and Tickets
 # Only keep the base folder structure and example files
-/**/archive/
-/**/processed/
-/**/raw/
-/**/tickets
+/DataETL/storage/*
+/DataETL/tickets/*.json
 
 
 # Ignore what is considered Java local cache and local env data

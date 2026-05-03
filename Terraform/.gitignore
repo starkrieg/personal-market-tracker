@@ -1,0 +1,17 @@
+# never commit input variables
+*.tfvars
+
+# never commit terraform state file
+*.tfstate
+*.tfstate.*
+*.lock.hcl
+
+# dont commit the dynamic files
+/s3/tickets/*.json
+/lambda/*
+
+
+# dont commit irrelevant files
+.terraform/
+*.csv
+_*.bat
