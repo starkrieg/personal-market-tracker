@@ -57,7 +57,7 @@ def scrape(website_url, ticket):
     if raw_scraped_page.status_code != 200:
         #something went wront, show alert and give up for this website and ticket
         print(f'Error when scraping {website_to_scrape} - {raw_scraped_page.status_code}')
-        return False;
+        return False
     ###
 
     soup = BeautifulSoup(raw_scraped_page.text, "html.parser")
