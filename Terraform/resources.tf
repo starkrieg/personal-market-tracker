@@ -67,8 +67,7 @@ resource "aws_s3_object" "scrapper_config_object" {
   }
 }
 
-
-## Lambda and EventBridge Trigger
+## Lambda 
 
 # IAM policy to manage who can assume the lambda execution role
 data "aws_iam_policy_document" "lambda_exec_assume_role_policy" {
@@ -84,6 +83,15 @@ data "aws_iam_policy_document" "lambda_exec_assume_role_policy" {
     }
 
     actions = ["sts:AssumeRole"]
+
+    condition {
+      test = "StringEquals"
+      variable = "aws:SourceAccount"
+
+      values = [
+        "${var.account_id}"
+      ]
+    }
   }
 }
 
@@ -120,6 +128,21 @@ resource "aws_iam_role_policy" "lambda_exec_role_policy" {
           "${aws_s3_bucket.scrapper_bucket.arn}/*"
         ]
       },
+      {
+        "Effect": "Allow",
+        "Action": "logs:CreateLogGroup",
+        "Resource": "arn:aws:logs:${var.region}:${var.account_id}:*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource": [
+          "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/lambda/${aws_lambda_function.lambda_scrapper.function_name}:*"
+        ]
+      }
     ]
   })
 
@@ -163,10 +186,72 @@ resource "aws_lambda_function" "lambda_scrapper" {
 
 }
 
-## Event bridge scrapper trigger
+## Event bridge scrapper Scheduler
+
+# IAM policy to manage who can assume the scheduler execution role
+data "aws_iam_policy_document" "scheduler_exec_assume_role_policy" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = [
+        "scheduler.amazonaws.com"
+      ]
+    }
+
+    actions = ["sts:AssumeRole"]
+
+    condition {
+      test = "StringEquals"
+      variable = "aws:SourceAccount"
+
+      values = [
+        "${var.account_id}"
+      ]
+    }
+  }
+}
+
+# Terraform-managed default role for Scheduler execution
+resource "aws_iam_role" "terraform_scheduler_role" {
+  name               = "terraform-scheduler-role"
+  assume_role_policy = data.aws_iam_policy_document.scheduler_exec_assume_role_policy.json
+
+  tags = {
+    ManagedBy = "Terraform"
+  }
+}
+
+# IAM policy for permissions for the Scheduler execution role
+resource "aws_iam_role_policy" "scheduler_exec_role_policy" {
+  name = "SchedulerExecPermissions"
+  role = aws_iam_role.terraform_scheduler_role.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "lambda:InvokeFunction"
+        ],
+        "Resource": [
+          "arn:aws:lambda:${var.region}:${var.account_id}:function:${aws_lambda_function.lambda_scrapper.function_name}:*",
+          "arn:aws:lambda:${var.region}:${var.account_id}:function:${aws_lambda_function.lambda_scrapper.function_name}"
+        ]
+      }
+    ]
+  })
+
+}
 
 resource "aws_scheduler_schedule" "scrapper-event-schedule" {
-  name       = "Trigger-Every-Workday"
+  # Scheduler does not have a Tag
+  # To track Terraform with prefix on Name
+  name       = "terraform-Trigger-Every-Workday"
   group_name = "default"
 
   description = "Trigger for 1 time every single work day"
@@ -180,11 +265,7 @@ resource "aws_scheduler_schedule" "scrapper-event-schedule" {
 
   target {
     arn      = aws_lambda_function.lambda_scrapper.arn
-    role_arn = aws_iam_role.terraform_lambda_role.arn
+    role_arn = aws_iam_role.terraform_scheduler_role.arn
   }
 
-# Terraform is complaining about these for some reason
-#  tags = {
-#    ManagedBy = "Terraform"
-#  }  
 }
